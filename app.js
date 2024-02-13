@@ -5,8 +5,7 @@ const path = require("path");
 const Campground = require("./models/campground.js");
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//(db setup - approach One)
-//async code
+//(db async setup)
 async function main() {
   try {
     await mongoose.connect("mongodb://127.0.0.1:27017/yelpcamp");
