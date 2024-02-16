@@ -1,0 +1,14 @@
+.navigations_links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1.5rem;
+    background-color: #840032;
+}
+
+.navigations_links a {
+    color: #e5dada;
+    margin-right: 2rem;
+    font-size: 1.25rem;
+    text-decoration: none;
+}

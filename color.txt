@@ -1,0 +1,5 @@
+dark bluish - #002642
+mahroon - #840032
+yellow - #e59500
+whitish - #e5dada
+blackish - #02040f
