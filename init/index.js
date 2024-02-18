@@ -31,6 +31,9 @@ const initializeDb = async () => {
     const campground = new Campground({
       title: `${randomArrayIndex(places)}, ${randomArrayIndex(descriptors)}`,
       location: `${cities[random1000].city}, ${cities[random1000].state}`,
+      image: `https://images.unsplash.com/photo-1682695794947-17061dc284dd?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D`,
+      description: `yelpcamp is going to be an amazing project and i will give my 100%`,
+      price: 100,
     });
 
     await campground.save();

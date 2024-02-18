@@ -1,30 +1,77 @@
 <% layout("layouts/boilerplate.ejs") %>
 
 <!------------------------------------------------------------------>
-<form action="/campgrounds/<%= campground._id %>?_method=PUT" method="post">
+<form
+  action="/campgrounds/<%= campground._id %>?_method=PUT"
+  method="post"
+  novalidate
+  class="needs-validation"
+>
+  <!--------------------- title ----------------------------->
   <div>
-    <label for="title">Title</label>
+    <label for="title" class="form-label">Title</label>
     <input
       type="text"
+      class="form-control"
+      value="<%= campground.title %>"
       id="title"
       name="campground[title]"
-      value="<%= campground.title %>"
       required
     />
   </div>
+
+  <!--------------------- location ----------------------------->
   <div>
-    <label for="location">Location</label>
+    <label for="location" class="form-label">Location</label>
     <input
       type="text"
+      value="<%= campground.location %>"
+      class="form-control"
       id="location"
       name="campground[location]"
-      value="<%= campground.location %>"
       required
     />
   </div>
+
+  <!--------------------- Price ----------------------------->
   <div>
-    <button>Edit</button>
+    <label for="price" class="form-label">Price</label>
+    <input
+      type="number"
+      id="price"
+      value="<%= campground.price %>"
+      class="form-control"
+      name="campground[price]"
+      required
+    />
+  </div>
+  <!--------------------- Image ----------------------------->
+  <div>
+    <label for="image" class="form-label">Image Url</label>
+    <input
+      type="text"
+      id="image"
+      class="form-control"
+      value="<%= campground.image %>"
+      name="campground[image]"
+      required
+    />
+  </div>
+  <!--------------------- Description ----------------------------->
+  <div>
+    <label for="description" class="form-label">Description</label>
+    <textarea
+      name="campground[description]"
+      id="description"
+      class="form-control"
+      rows="5"
+      required
+    >
+<%= campground.description %></textarea
+    >
+  </div>
+  <!--------------------- submit btn ----------------------------->
+  <div>
+    <button>update</button>
   </div>
 </form>
-
-<a href="/campgrounds">All campgrounds</a>

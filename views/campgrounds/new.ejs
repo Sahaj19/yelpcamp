@@ -1,18 +1,67 @@
 <% layout("layouts/boilerplate.ejs") %>
 
 <!------------------------------------------------------------------>
-<form action="/campgrounds" method="post">
+<form action="/campgrounds" method="post" novalidate class="needs-validation">
+  <!--------------------- title ----------------------------->
   <div>
-    <label for="title">Title</label>
-    <input type="text" id="title" name="campground[title]" required />
+    <label for="title" class="form-label">Title</label>
+    <input
+      type="text"
+      class="form-control"
+      id="title"
+      name="campground[title]"
+      required
+    />
   </div>
+
+  <!--------------------- location ----------------------------->
   <div>
-    <label for="location">Location</label>
-    <input type="text" id="location" name="campground[location]" required />
+    <label for="location" class="form-label">Location</label>
+    <input
+      type="text"
+      class="form-control"
+      id="location"
+      name="campground[location]"
+      required
+    />
   </div>
+
+  <!--------------------- Price ----------------------------->
+  <div>
+    <label for="price" class="form-label">Price</label>
+    <input
+      type="number"
+      id="price"
+      class="form-control"
+      placeholder="0.00"
+      name="campground[price]"
+      required
+    />
+  </div>
+  <!--------------------- Image ----------------------------->
+  <div>
+    <label for="image" class="form-label">Image Url</label>
+    <input
+      type="text"
+      id="image"
+      class="form-control"
+      name="campground[image]"
+      required
+    />
+  </div>
+  <!--------------------- Description ----------------------------->
+  <div>
+    <label for="description" class="form-label">Description</label>
+    <textarea
+      name="campground[description]"
+      id="description"
+      class="form-control"
+      rows="5"
+      required
+    ></textarea>
+  </div>
+  <!--------------------- submit btn ----------------------------->
   <div>
     <button>create</button>
   </div>
 </form>
-
-<a href="/campgrounds">All campgrounds</a>

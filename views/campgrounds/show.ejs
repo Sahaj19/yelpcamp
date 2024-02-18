@@ -2,14 +2,14 @@
 
 <!------------------------------------------------------------------>
 <h1>Particular campground in detail</h1>
+<img src="<%= campground.image %>" alt="camp image" class="show_page_img" />
 <ul>
-  <li><%= campground.title %></li>
-  <li><%= campground.location %></li>
+  <li><strong>Title</strong> : <%= campground.title %></li>
+  <li><strong>Location</strong> : <%= campground.location %></li>
+  <li><strong>Description</strong> : <%= campground.description %></li>
+  <li><strong>Price</strong> : <%= campground.price %></li>
 </ul>
 <a href="/campgrounds/<%= campground._id %>/edit">Edit this campground</a>
-<br />
 <form action="/campgrounds/<%= campground._id %>?_method=DELETE" method="post">
   <button>Delete</button>
 </form>
-
-<a href="/campgrounds">All campgrounds</a>
