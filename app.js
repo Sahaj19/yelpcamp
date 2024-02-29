@@ -5,6 +5,8 @@ const path = require("path");
 const ejsMate = require("ejs-mate");
 const methodOverride = require("method-override");
 const Campground = require("./models/campground.js");
+const ExpressError = require("./utils/expressError.js");
+const wrapAsync = require("./utils/wrapAsync.js");
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //(db async setup)
@@ -37,10 +39,13 @@ app.get("/", (req, res) => {
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //(index page)
-app.get("/campgrounds", async (req, res) => {
-  let allCampgrounds = await Campground.find();
-  res.render("campgrounds/index.ejs", { allCampgrounds });
-});
+app.get(
+  "/campgrounds",
+  wrapAsync(async (req, res) => {
+    let allCampgrounds = await Campground.find();
+    res.render("campgrounds/index.ejs", { allCampgrounds });
+  })
+);
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //(new page)
@@ -49,41 +54,94 @@ app.get("/campgrounds/new", (req, res) => {
 });
 
 //(post route)
-app.post("/campgrounds", async (req, res) => {
-  let campground = new Campground(req.body.campground);
-  await campground.save();
-  res.redirect("/campgrounds");
-});
+app.post(
+  "/campgrounds",
+  wrapAsync(async (req, res) => {
+    let campground = new Campground(req.body.campground);
+    await campground.save();
+    res.redirect("/campgrounds");
+  })
+);
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //(show page)
-app.get("/campgrounds/:id", async (req, res) => {
-  let { id } = req.params;
-  let campground = await Campground.findById(id);
-  res.render("campgrounds/show.ejs", { campground });
-});
+app.get(
+  "/campgrounds/:id",
+  wrapAsync(async (req, res, next) => {
+    try {
+      let { id } = req.params;
+
+      let campground = await Campground.findById(id);
+
+      if (!campground) {
+        return next(new ExpressError(400, "Campground don't exist!"));
+      }
+
+      res.render("campgrounds/show.ejs", { campground });
+    } catch (err) {
+      next(err);
+    }
+  })
+);
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //(edit page)
-app.get("/campgrounds/:id/edit", async (req, res) => {
-  let { id } = req.params;
-  let campground = await Campground.findById(id);
-  res.render("campgrounds/edit.ejs", { campground });
-});
+app.get(
+  "/campgrounds/:id/edit",
+  wrapAsync(async (req, res, next) => {
+    try {
+      let { id } = req.params;
+
+      let campground = await Campground.findById(id);
+
+      if (!campground) {
+        return next(new ExpressError(400, "Campground don't exist!"));
+      }
+
+      res.render("campgrounds/edit.ejs", { campground });
+    } catch (error) {
+      next(error);
+    }
+  })
+);
 
 //(update route)
-app.put("/campgrounds/:id", async (req, res) => {
-  let { id } = req.params;
-  await Campground.findByIdAndUpdate(id, { ...req.body.campground });
-  res.redirect(`/campgrounds/${id}`);
-});
+app.put(
+  "/campgrounds/:id",
+  wrapAsync(async (req, res) => {
+    let { id } = req.params;
+    await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+    res.redirect(`/campgrounds/${id}`);
+  })
+);
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //(delete route)
-app.delete("/campgrounds/:id", async (req, res) => {
-  let { id } = req.params;
-  await Campground.findByIdAndDelete(id);
-  res.redirect("/campgrounds");
+app.delete(
+  "/campgrounds/:id",
+  wrapAsync(async (req, res) => {
+    let { id } = req.params;
+    await Campground.findByIdAndDelete(id);
+    res.redirect("/campgrounds");
+  })
+);
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+app.all("*", (req, res, next) => {
+  next(new ExpressError(400, "Page not found!"));
+});
+
+app.use((err, req, res, next) => {
+  if (err instanceof mongoose.CastError) {
+    return next(new ExpressError(400, "Campground Don't exist!"));
+  } else {
+    next(err);
+  }
+});
+
+app.use((err, req, res, next) => {
+  let { status = 400, message = "Something went wrong!" } = err;
+  res.status(status).send(message);
 });
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
